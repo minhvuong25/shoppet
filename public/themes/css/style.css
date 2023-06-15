@@ -1,0 +1,170 @@
+/*
+Theme Name: Haustiere
+Theme URI: https://haustiere.7uptheme.net
+Author: the 7up WordPress team
+Author URI: http://themeforest.net/user/7-up
+Description: The responsive shop WordPress theme
+Version: 2.7
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: full-width-template, theme-options, rtl-language-support, two-columns, left-sidebar, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, sticky-post, threaded-comments
+Text Domain: haustiere
+*/
+
+.dosis-font {
+	font-family: 'Coiny', cursive !important;
+}
+
+.block-right {
+	display: block !important;
+	float: right !important;
+}
+
+.list-product-wrap {
+	margin-top: 10px;
+}
+
+.main-header .main-nav {
+	margin: 0 !important;
+}
+
+.product-price {
+	font-family: arial !important;
+}
+
+.product-item-1 > .title18:first-child {
+	text-align: center;
+	font-size: 30px;
+	font-weight: bold;
+	font-family: 'Coiny', cursive !important;
+	color: #de8ebe !important;
+}
+
+.font-coiny {
+	font-family: 'Coiny', cursive !important;
+	color: #de8ebe !important;
+}
+
+.font-coiny a {
+	color: inherit;
+}
+
+.custom-circle-slider {
+	padding-top: 10px;
+}
+
+.title-circle-slider {
+	top: 0px !important;
+}
+
+.product-title {
+	line-height: 30px;
+}
+
+.main-header {
+	padding: 5px 0;
+}
+
+.view-type a {
+	color: #de8ebe;
+}
+
+a:hover, a:focus, a:active {
+	color: #de8ebe;
+}
+
+.scroll-top.active {
+	right: 30px;
+	bottom: 172px;
+}
+
+body .scroll-top {
+	bottom: 20px;
+}
+
+#menu-pet-menu > li {
+	width: 100%;
+}
+
+.vc_custom_1576244154005 {
+	margin-right: 20px !important;
+}
+
+
+.logo-text {
+	text-align: center;
+}
+
+.wpb_wrapper .mini-cart-link::before {
+	position: absolute;
+	top: 3px;
+	left: 3px !important;
+	bottom: 3px;
+	right: 3px;
+	border: 1px dashed rgba(255,255,255,0.5);
+	content: "";
+	border-radius: 10px;
+}
+
+.fixed-header {
+	position: unset !important;
+}
+
+.main-search-form {
+	width: 100%;
+	float: right;
+}
+
+.main-header .search-form {
+	z-index: 1000 !important;
+}
+
+.product-title {
+	line-height: 40px;
+}
+
+.content-about {
+	font-size: 18px !important;
+}
+
+@media (max-width: 767px)
+{
+	.main-nav > ul {
+		left: -28px !important;	
+	}	
+}
+
+
+.sticky-hotline {
+	display: block;
+	position: fixed;
+    bottom: 25px;
+	right: 0;
+	z-index: 99;
+}
+
+.sticky-bottom {
+    display: block;
+    position: fixed;
+    bottom: 0;
+	left: 0;
+    background: white;
+    width: 100%;
+    z-index: 99;
+    box-shadow: 2px 1px 9px #dedede;
+    border-top: 1px solid #eaeaea;
+	background-color: #de8ebe;
+}
+
+.sticky-bottom ul {
+	margin: 0;
+    padding: 0;
+}
+
+.sticky-bottom ul li {
+    width: 25%;
+    float: left;
+    list-style: none;
+    text-align: center;
+    font-size: 13.5px;
+}
