@@ -27,11 +27,11 @@ class HomeController extends Controller
         $url_canonical = $request->url();
         $category = Category::whereNotIn('category_id',[21,25])->get();
         $danhmuc = Danhmuc::all();
-        $pet = Product::where('product_status','0')->where('danhmuc_id',21)->orderBy('product_id','desc')->get();
+        $pet = Product::where('product_status','0')->where('danhmuc_id',21)->orderBy('product_id','desc')->limit(8)->get();
         $accessory = Product::where('product_status','0')->where('danhmuc_id',23)->orderBy('product_id','desc')->get();
         $spa = Product::where('product_status','0')->where('danhmuc_id',24)->orderBy('product_id','desc')->get();
         $all_product = Product::where('product_status','0')->orderBy('product_id','desc')->get();
-        $food = Product::where('product_status','0')->where('danhmuc_id',22)->orderBy('product_price','desc')->limit(12)->get();
+        $food = Product::where('product_status','0')->where('danhmuc_id',22)->orderBy('product_price','desc')->limit(3)->get();
         $banner = DB::table('tbl_banner')->where('banner_status','0')->orderBy('banner_id','desc')->limit(1)->get();
         $all_slider = DB::table('tbl_slider')->where('slider_status','0')->orderBy('slider_id','desc')->limit(5)->get();
         $all_sponsor = DB::table('tbl_sponsor')->where('sponsor_status','0')->orderBy('sponsor_id','desc')->limit(4)->get();
@@ -88,8 +88,10 @@ class HomeController extends Controller
         $meta_keywords = "";
         $meta_title = "MVPetShop.vn | Sản phẩm theo thương hiệu";
         $url_canonical = $request->url();
-        $show_product_by_cate = Product::where('category_id',$category_id)->whereNotIn('category_id',[21,25])->OrderBy('product_price','asc')->where('product_status',0)->get();
-        $category = Category::whereNotIn('category_id',[21,25])->get();
+//        $show_product_by_cate = Product::where('category_id',$category_id)->whereNotIn('category_id',[21,25])->OrderBy('product_price','asc')->where('product_status',0)->get();
+        $show_product_by_cate = Product::where('category_id',$category_id)->OrderBy('product_price','asc')->where('product_status',0)->get();
+//        $category = Category::whereNotIn('category_id',[21,25])->get();
+        $category = Category::all();
         $banner = DB::table('tbl_banner')->where('banner_status','0')->orderBy('banner_id','desc')->limit(1)->get();
         $newProduct = Product::where('category_id',$category_id)->Orderby('product_id','desc')->take(1)->get();
         return view('pages.product.show_product_by_cate')
@@ -103,5 +105,23 @@ class HomeController extends Controller
         $category = Category::all();
         $allFood = Product::where('danhmuc_id',22)->where('product_status',0)->get();
         return view('pages.product.allFood',compact('meta_desc','meta_keywords','meta_title','url_canonical','category','allFood'));
+    }
+    public function allAccessory(Request $request){
+        $meta_desc = "";
+        $meta_keywords = "";
+        $meta_title = "MVPetShop.vn | Tất cả sản phẩm";
+        $url_canonical = $request->url();
+        $category = Category::all();
+        $allAccessory = Product::where('danhmuc_id',23)->where('product_status',0)->get();
+        return view('pages.product.allAccessory',compact('meta_desc','meta_keywords','meta_title','url_canonical','category','allAccessory'));
+    }
+    public function allPet(Request $request){
+        $meta_desc = "";
+        $meta_keywords = "";
+        $meta_title = "MVPetShop.vn | Tất cả sản phẩm";
+        $url_canonical = $request->url();
+        $category = Category::all();
+        $allPet = Product::where('danhmuc_id',21)->where('product_status',0)->get();
+        return view('pages.product.allPet',compact('meta_desc','meta_keywords','meta_title','url_canonical','category','allPet'));
     }
 }

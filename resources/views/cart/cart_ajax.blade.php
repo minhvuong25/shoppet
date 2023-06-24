@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php
     $message = Session::get('message');
     if ($message) {
@@ -61,7 +62,8 @@
                             <td class="checkout-total p-20"><strong class="text-center">{{ number_format($subtotal) }} VND</strong></td>
                             <td>
                                 <a class="cart_quantity_delete p-20" href="{{ url('/delete-sp/' . $cart['session_id']) }}"><i
-                                        class="fa fa-times"></i></a>
+                                        class="fa-solid fa-trash"></i></a>
+{{--                                <i class="fa-solid fa-trash"></i>--}}
                             </td>
                         </tr>
                     @endforeach

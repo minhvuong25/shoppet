@@ -1,10 +1,10 @@
 @extends('layout')
 @section('content')
 <div class="container">
-    <h2 class="text-center mb-2">Có tất cả {{ count($allFood) }} sản phẩm</h2>
+    <h2 class="text-center mb-2">Có tất cả {{ count($allAccessory) }} sản phẩm</h2>
     <div class="block-element product-item-1 product-grid-view  default js-content-wrap">
         <div class="products row list-product-wrap js-content-main">
-            @foreach ($allFood as $product)
+            @foreach ($allAccessory as $product)
                 <div
                     class="list-col-item list-4-item post-48252 product type-product status-publish has-post-thumbnail product_cat-samoyed product_cat-danh-muc-cun first instock shipping-taxable purchasable product-type-simple">
                     <div class="item-product item-product-grid">

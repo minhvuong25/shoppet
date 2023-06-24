@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="M_Adnan">
-    <meta property="og:site_name" content="http://localhost/camera">
+    <meta property="og:site_name" content="{{route('Home')}}">
     <meta property="og:description" content="{{ $meta_desc }}">
     <meta property="og:title" content="{{ $meta_title }}">
     <meta property="og:url" content="{{ $url_canonical }}">
@@ -26,7 +26,8 @@
     <script>
         document.documentElement.className = document.documentElement.className + ' yes-js js_active js'
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>--}}
+    <script src="{{asset('/cdn/sweet_alert.js')}}"></script>
     <title>MẬT PET FAMILY</title>
 {{--    <link rel='stylesheet' id='font-ionicons-css-css' href='{{ URL::to('/themes/css/ionicons.min.css') }}'--}}
 {{--        type='text/css' media='all' />--}}
@@ -44,24 +45,25 @@
         media='all' />
     <link rel='stylesheet' id='s7upf-theme-css' href='{{ URL::to('/themes/css/theme.css') }}' type='text/css'
         media='all' />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet">
+{{--    <link rel="preconnect" href="https://fonts.googleapis.com">--}}
+{{--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>--}}
+    <link href="{{asset('/cdn/font.css')}}" rel="stylesheet">
     <link rel='stylesheet' id='s7upf-theme-style-css' href='{{ URL::to('/themes/css/custom-style.css') }}'
         type='text/css' media='all' />
     <script type="text/javascript" src="{{ asset('/frontend/js/sweet-alert.min.js') }}"></script>
     <link href="{{ asset('/frontend/icon/pe-icon-7-stroke/css/pe-icon-7-stroke.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('/frontend/path/css/font-awesome.min.css') }}">
-    <link href="{{ asset('/frontend/lightgallery.min.css/') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/frontend/css/font-awesome.min.css') }}">
+    <link href="{{ asset('/frontend/css/lightgallery.min.css/') }}" rel="stylesheet">
     <link href="{{ asset('/frontend/css/lightslider.css') }}" rel="stylesheet">
     <link href="{{ asset('/frontend/css/prettify.css') }}" rel="stylesheet">
     <script src="{{ asset('/themes/js/ajax-googleapis.js') }}"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    <link rel="stylesheet" href="{{asset('/cdn/bootstrap4.css')}}"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('/themes/css/cdnjs-cloudflare.css') }}" />
     <link href="{{ asset('/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="{{ asset('/themes/js/cdn-ckeditor.js') }}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
+{{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">--}}
+    <link rel="stylesheet" href="{{asset('/cdn/sweetalert_113.css')}}">
     <style id='s7upf-theme-style-inline-css' type='text/css'>
         a:hover,
         a:focus,
@@ -279,14 +281,16 @@
     <link rel='stylesheet' id='s7upf-theme-default-css' href='{{ URL::to('/themes/css/style.css') }}'
         type='text/css' media='all' />
     <!--[if lt IE 9]>
-        <link rel='stylesheet' id='vc_lte_ie9-css'  href='https://matpetfamily.com/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css' type='text/css' media='screen' />
+        <link rel='stylesheet' id='vc_lte_ie9-css'  href='{{asset('/cdn/matpetfamily.css')}}'
+type='text/css' media='screen' />
         <![endif]-->
     <link rel='stylesheet' id='js_composer_front-css' href='{{ URL::to('/themes/css/js_composer.min.css') }}'
         type='text/css' media='all' />
     <script type='text/javascript' src='{{ URL::to('/themes/js/jquery.js') }}'></script>
     <script type='text/javascript' src='{{ URL::to('/themes/js/jquery-migrate.min.js') }}'></script>
     <!-- Google Analytics snippet added by Site Kit -->
-    <script type='text/javascript' src='https://www.googletagmanager.com/gtag/js?id=UA-118328820-3' async></script>
+{{--    <script type='text/javascript' src='https://www.googletagmanager.com/gtag/js?id=UA-118328820-3' async></script>--}}
+    <script type='text/javascript' src='{{asset('/cdn/googlemanager.js')}}' async></script>
     <!-- Messenger Plugin chat Code -->
     <div id="fb-root"></div>
     <!-- Your Plugin chat code -->
@@ -492,7 +496,11 @@
                                                                 width="1400" height="180"
                                                                 src="wp-content/uploads/2018/01/MatPetBanner.png"
                                                                 class="vc_single_image-img attachment-full" alt=""
-                                                                srcset="https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner.png 1400w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-300x39.png 300w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-768x99.png 768w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-1024x132.png 1024w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-600x77.png 600w"
+                                                                srcset="{{asset('/uploads/MatPetBanner.png')}} 1400w,
+                                                                 {{asset('/uploads/MatPetBanner-300x39.png')}} 300w,
+                                                                 {{asset('/uploads/MatPetBanner-768x99.png')}} 768w,
+                                                                 {{asset('/uploads/MatPetBanner-1024x132.png.png')}} 1024w,
+                                                                  {{asset('/uploads/MatPetBanner-600x77.png.png')}} 600w"
                                                                 sizes="(max-width: 1400px) 100vw, 1400px" /></div>
                                                     </figure>
                                                 </div>

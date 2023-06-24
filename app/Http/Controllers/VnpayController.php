@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
+use App\Models\Shipping;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class VnpayController extends Controller
 {
-    public function store(){
+    public function store(Request $request){
+
+        dd($request->all());
         $vnp_Url = config('vnpay.vnp_Url');
         $vnp_Returnurl = route('Home');
         $vnp_TmnCode = config('vnpay.vnp_TmnCode');//Mã website tại VNPAY
@@ -103,5 +114,132 @@ class VnpayController extends Controller
         , 'message' => 'success'
         , 'data' => $vnp_Url);
         return redirect($vnp_Url);
+    }
+    public function confirm_order(Request $request)
+    {
+        $data = $request->all();
+        if (Session::get('cart')) {
+            foreach (Session::get('cart') as $key => $cart) {
+                $id = $cart['product_id'];
+                // $coupon = $data['order_coupon'];
+                // $fee = $data['order_fee'];
+            }
+            $checkProduct = Product::where('product_id', $id)->where('product_status', 0)->first();
+            if (!$checkProduct) {
+                Session::forget('coupon');
+                Session::forget('fee');
+                Session::forget('cart');
+                return response()->json([
+                    'data' => 'Kotontai'
+                ]);
+                // dd('ko ton tai');
+            } elseif ($cart['product_qty'] > $checkProduct->product_quantity) {
+                Session::forget('coupon');
+                Session::forget('fee');
+                Session::forget('cart');
+                return response()->json([
+                    'data' => false
+                ]); //Đúng
+            } elseif ($cart['product_qty'] > 0) {
+                // get coupon
+                if ($data['order_coupon'] != 'no') {
+                    $coupon = Coupon::where('coupon_code', $data['order_coupon'])->first();
+                    $coupon->coupon_used = $coupon->coupon_used . ',' . Session::get('customer_id');
+                    $coupon->coupon_times = $coupon->coupon_times - 1;
+                    $coupon_mail = $coupon->coupon_code;
+                    $coupon_condition = $coupon->coupon_condition;
+                    $coupon_number = $coupon->coupon_number;
+                    $coupon->save();
+                } else {
+                    $coupon_mail = 'Không có';
+                }
+                //get vận chuyển
+                $shipping = new Shipping();
+                $shipping->shipping_name = $data['shipping_name'];
+                $shipping->shipping_address = $data['shipping_address'];
+                $shipping->shipping_phone = $data['shipping_phone'];
+                $shipping->shipping_email = $data['shipping_email'];
+                $shipping->shipping_notes = $data['shipping_notes'];
+                $shipping->shipping_method = $data['shipping_method'];
+                $shipping->save();
+                $shipping_id = $shipping->shipping_id;
+                $checkout_code = substr(md5(microtime()), rand(0, 25), 9);
+                //get order
+                $order = new Order();
+                $order->customer_id = Session::get('customer_id');
+                $order->shipping_id = $shipping_id;
+                $order->order_status = 1;
+                $order->order_code  = $checkout_code;
+                $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
+                $date_order = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+                $order->created_at = $today;
+                $order->order_date = $date_order;
+                $order->save();
+                if (Session::get('cart') == true) {
+                    foreach (Session::get('cart') as $key => $cart) {
+                        $order_details = new OrderDetail();
+                        $order_details->order_code = $checkout_code;
+                        $order_details->product_id = $cart['product_id'];
+                        $order_details->product_name = $cart['product_name'];
+                        $order_details->product_price = $cart['product_price'];
+                        $order_details->product_sales_quantity = $cart['product_qty'];
+                        $order_details->product_coupon = $data['order_coupon'];
+                        $order_details->product_feeship = $data['order_fee'];
+                        $order_details->save();
+                    }
+                }
+                $now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y H:i:s');
+                $title_mail = "Đơn hàng xác nhận" . ' ' . $now;
+                $customer = Customer::find(Session::get('customer_id'));
+                $data['email'][] = $customer->customer_email;
+                if (Session::get('cart') == true) {
+                    foreach (Session::get('cart') as $key => $cart_mail) {
+                        $cart_array[] = array(
+                            'product_name' => $cart_mail['product_name'],
+                            'product_price' => $cart_mail['product_price'],
+                            'product_qty' => $cart_mail['product_qty'],
+                        );
+                    }
+                }
+                if (Session::get('fee') == true) {
+                    $fee = Session::get('fee');
+                } else {
+                    $fee = 20000;
+                }
+                $shipping_array = array(
+                    'fee' => $fee,
+                    'customer_name' => $customer->name,
+                    'shipping_name' => $data['shipping_name'],
+                    'shipping_email' => $data['shipping_email'],
+                    'shipping_phone' => $data['shipping_phone'],
+                    'shipping_address' => $data['shipping_address'],
+                    'shipping_notes' => $data['shipping_notes'],
+                    'shipping_method' => $data['shipping_method'],
+                );
+                $ordercode_mail = array(
+                    'coupon_code' => $coupon_mail,
+                    'order_code' => $checkout_code,
+                    // 'coupon_number'=> $coupon_number,
+                    // 'coupon_condition'=> $coupon_condition,
+                );
+                Mail::send('pages.mail.mail_order', ['cart_array' => $cart_array, 'shipping_array' => $shipping_array, 'code' => $ordercode_mail], function ($message) use ($title_mail, $data) {
+                    $message->to($data['email'])->subject($title_mail);
+                    $message->from($data['email'], $title_mail);
+                });
+                Session::forget('coupon');
+                Session::forget('fee');
+                Session::forget('cart');
+                return response()->json([
+                    'data' => true
+                ]);
+            } else {
+                Session::forget('coupon');
+                Session::forget('fee');
+                Session::forget('cart');
+                return response()->json([
+                    'data' => 'CheckAm'
+                ]);
+            }
+        }
     }
 }

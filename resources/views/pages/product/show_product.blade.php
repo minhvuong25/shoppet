@@ -27,23 +27,24 @@
 
                         <ul id="imageGallery" style="padding-left: 0 !important">
                             @foreach ($gallery as $key => $gal)
-                                <li data-thumb="{{ asset('/uploads/gallery/' . $gal->gallery_image) }}"
-                                    data-src="{{ asset('/uploads/gallery/' . $gal->gallery_image) }}"
+                                <li data-thumb="{{ asset('./public/uploads/gallery/' . $gal->gallery_image) }}"
+                                    data-src="{{ asset('/public/uploads/gallery/' . $gal->gallery_image) }}"
                                     >
                                     <img class="img-1" alt="{{ $gal->gallery_name }}"
-                                        src="{{ asset('/uploads/gallery/' . $gal->gallery_image) }}" alt=""
+                                        src="{{ asset('/public/uploads/gallery/' . $gal->gallery_image) }}" alt=""
                                         width="100%" height="100%">
                                 </li>
                             @endforeach
 
                         </ul>
+                    </form>
                 </div>
                 <div class="col-sm-7">
                     <div class="product-information">
                         <!--/product-information-->
                         <h2 class="name_details">{{ $show->product_name }}</h2>
                         <label class="brand_name">Thương hiệu :</label>
-                        <span class="brand_name"><a href="" style="color: red">{{ $show->category_name }}</a></span>
+                        <span class="brand_name"><a href="{{ URL::to('product-by-category', ['category_id' => $show->category_id]) }}" style="color: red">{{ $show->category_name }}</a></span>
                         <form action="{{ URL::to('/save-cart') }}" method="POST">
                             {{ csrf_field() }}
                             <br>

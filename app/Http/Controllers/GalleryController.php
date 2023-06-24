@@ -79,6 +79,7 @@ class GalleryController extends Controller
         echo $output;
     }
     public function insert_gallery(Request $request,$pro_id){
+
         $get_image = $request->file('file');
         if($get_image){
             foreach($get_image as $key){
@@ -94,7 +95,7 @@ class GalleryController extends Controller
             }
         }
                 Session::put('message','Thêm thành công');
-                return redirect()->back();
+                return redirect()->route('all-product');
     }
     public function update_gallery(Request $request){
         $gal_id = $request->gal_id;

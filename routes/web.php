@@ -328,6 +328,8 @@ Route::post('/save-danhmuc', [DanhmucController::class, 'saveDanhmuc']);
 Route::post('/update-danhmuc/{category_mxh_id}', [DanhmucController::class, 'updateDanhmuc']);
 //
 Route::get('/all-food', [HomeController::class, 'allFood']);
+Route::get('/all-accessory', [HomeController::class, 'allAccessory']);
+Route::get('/all-pet', [HomeController::class, 'allPet']);
 //paypal
 Route::get('handle-payment', 'PayPalPaymentController@handlePayment')->name('make.payment');
 

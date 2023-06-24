@@ -320,7 +320,7 @@ class CheckoutController extends Controller
     public function confirm_order(Request $request)
     {
         $data = $request->all();
-        if (Session::get('cart') == true) {
+        if (Session::get('cart')) {
             foreach (Session::get('cart') as $key => $cart) {
                 $id = $cart['product_id'];
                 // $coupon = $data['order_coupon'];
