@@ -37,7 +37,7 @@ class CouponController extends Controller
         $coupon->coupon_date_end = strtotime($data['coupon_date_end']);
         $coupon->save();
         toastr()->success('Thêm mã giảm giá thành công');
-        return Redirect::to('coupon');
+        return Redirect::to('list-coupon');
     }
     public function list_coupon(){
         $this->check();

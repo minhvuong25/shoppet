@@ -47,7 +47,6 @@ class ProductController extends Controller
         $this->check();
         $all_product = Product::join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->orderBy('tbl_product.product_id', 'desc')
             ->get();
-
         $manager_product = view('admin.product.all_product')->with('all_product', $all_product);
         return view('admin_layout')->with('admin.product.all_product', $manager_product);
     }
@@ -93,7 +92,7 @@ class ProductController extends Controller
             $gallery->gallery_image = $new_image;
             $gallery->gallery_name = $new_image;
             $gallery->product_id = $pro_id;
-            $gallery->save();   
+            $gallery->save();
             toastr()->success('Thêm thành công');
             Session::put('message', 'Thêm thành công');
             return Redirect::to('all-product');
@@ -119,15 +118,20 @@ class ProductController extends Controller
     public function edit_product($product_id)
     {
         $this->check();
+        $product = Product::where('product_id',$product_id)->first();
+        $danhmuc_id= $product->danhmuc_id;
+        $cate_id = $product->category_id;
         $cate_product = Category::orderBy('category_id', 'desc')->get();
         $danhmuc = Danhmuc::orderBy('danhmuc_id', 'desc')->get();
         $edit_product = Product::where('product_id', $product_id)->get();
-        $manager_product = view('admin.product.edit_product')->with('edit_product', $edit_product)->with('cate_product', $cate_product)->with('danhmuc',$danhmuc);
+        $manager_product = view('admin.product.edit_product')->with('edit_product', $edit_product)
+            ->with('cate_product', $cate_product)->with('danhmuc',$danhmuc)->with('danhmuc_id',$danhmuc_id)->with('cate_id',$cate_id);
 
         return view('admin_layout')->with('admin.product.edit_product', $manager_product);
     }
     public function update_product(Request $request, $product_id)
     {
+//        dd($request->product_danhmuc);
         $this->check();
         $data = array();
         $data['product_name'] = $request->product_name;
@@ -137,6 +141,7 @@ class ProductController extends Controller
         $data['product_content'] = $request->product_content;
         $data['product_price'] = $request->product_price;
         $data['product_cost'] = $request->product_cost;
+        $data['danhmuc_id'] = $request->product_danhmuc;
         $data['category_id'] = $request->product_cate;
         $data['product_sale'] = $request->product_sale;
         $data['product_status'] = $request->product_status;
@@ -167,20 +172,20 @@ class ProductController extends Controller
     //End Admin
     public function details_product($product_slug, Request $request)
     {
-        $cate_product = Category::where('category_status', '0')->orderBy('category_id', 'desc')->whereNotIn('category_id',[21,25])->get();
-        $details_product = Product::join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_product.product_slug', $product_slug)
+        $cate_product = Category::where('category_status', '0')->orderBy('category_id', 'desc')->whereNotIn('category_id',[21])->get();
+        $details_product = Product::join('tbl_category', 'tbl_product.category_id', '!=', 'tbl_category.category_id')->where('tbl_product.product_slug', $product_slug)
             ->get();
         foreach ($details_product as $key) {
+
             $category_id = $key->category_id;
-            $meta_desc = $key->product_desc;
-            $meta_keywords = $key->product_slug;
             $meta_title = "MVPetShop.vn" . ' | ' . $key->product_slug;
-            $url_canonical = $request->url();
+
             $product_id = $key->product_id;
         }
         $commentProduct = Product::where('product_buy', 'LIKE', '%' . Session::get('customer_id') . '%')->first();
         //update views product
         $product = Product::where('product_slug', $product_slug)->first();
+//        dd($product)
         $product->product_views = $product->product_views + 1;
         $product->save();
         // gallery
@@ -202,7 +207,7 @@ class ProductController extends Controller
         $countrate4 = count($rating4);
         $countrate5 = count($rating5);
         if ($category_id != '') {
-            return view('pages.product.show_product')->with('category', $cate_product)->with('show_product', $details_product)->with('related_product', $related_product)->with(compact('meta_keywords', 'gallery', 'meta_desc', 'meta_title', 'url_canonical', 'rating', 'product','rating1','countrate','countrate5','countrate4','countrate3','countrate2','countrate1','countrate','commentProduct'));
+            return view('pages.product.show_product')->with('category', $cate_product)->with('show_product', $details_product)->with('related_product', $related_product)->with(compact( 'gallery',  'meta_title', 'rating', 'product','rating1','countrate','countrate5','countrate4','countrate3','countrate2','countrate1','countrate','commentProduct'));
         } else {
             return view('pages.error');
         }
@@ -220,7 +225,6 @@ class ProductController extends Controller
     public function import_word(Request $request)
     {
         $path = $request->file('file')->getRealPath();
-        dd($path);
         Excel::import(new ExportsWordImport, $path);
         return back();
     }
@@ -270,37 +274,77 @@ class ProductController extends Controller
     public function load_comment(Request $request)
     {
         $product_id = $request->product_id;
-        $comment = Comment::where('comment_product_id', $product_id)
+        $comments = Comment::where('comment_product_id', $product_id)
             // ->where('comment_parent_comment',null)
             ->get();
         $output = '';
-        foreach ($comment as $key => $comment) {
-            $output .= '
-                <div class="row style_comment">
-                    <div class="col-md-2">
-                        <img src="public/fronent/images/" alt="">
-                    </div>
-                    <div class="col-md-10">
-                        <p style="color: blue">' . $comment->comment_name . '</p>
-                        <p>' . $comment->comment . '</p>
-                    </div>
-                </div>
-                <p></p>
-                ';
+
+        foreach ($comments as $key => $comment) {
+
+//            if ($comment->comment_parent_comment != null) {
+//                $output .= '
+//                    <div class="row comment_reply style_comment">
+//                    <div class="col-md-2">
+//                        <img src="public/fronent/images/" alt="">
+//                    </div>
+//                    <div class="col-md-10">
+//                        <p style="color: blue">' . $comment->comment_name . '</p>
+//                        <p>' . $comment->comment . '</p>
+//                    </div>
+//                </div>
+//                <p></p>
+//                    ';
+//            }else {
+//                $output .= '
+//                <div class="row style_comment">
+//                    <div class="col-md-2">
+//                        <img src="public/fronent/images/" alt="">
+//                    </div>
+//                    <div class="col-md-10">
+//                        <p style="color: blue">' . $comment->comment_name . '</p>
+//                        <p>' . $comment->comment . '</p>
+//                    </div>
+//                </div>
+//                <p></p>
+//                ';
+//            }
             if ($comment->comment_parent_comment != null) {
+                $comment_chill_id = $comment->comment_parent_comment;
                 $output .= '
-                    <div class="row comment_reply style_comment">
-                    <div class="col-md-2">
-                        <img src="public/fronent/images/" alt="">
-                    </div>
-                    <div class="col-md-10">
-                        <p style="color: blue">' . $comment->comment_name . '</p>
-                        <p>' . $comment->comment . '</p>
-                    </div>
-                </div>
-                <p></p>
-                    ';
+        <div class="row style_comment">
+            <div class="col-md-2">
+                <img src="public/fronent/images/" alt="">
+            </div>
+            <div class="col-md-10">
+                <p style="color: blue">' . $comment->comment_name . '</p>
+                <p>' . $comment->comment . '</p>
+            </div>
+        </div>
+        <p></p>
+        <div class="row comment_reply style_comment">
+            <div class="col-md-2">
+                <img src="public/fronent/images/" alt="">
+            </div>
+            <div class="col-md-10">
+                <p style="color: blue">Comment Reply</p>
+                <p>Reply content goes here...</p>
+            </div>
+        </div>
+        <p></p>';
+            } else {
+                $output .= '
+        <div class="row style_comment">
+            <div class="col-md-2">
+                <img src="public/fronent/images/" alt="">
+            </div>
+            <div class="col-md-10">
+                <p style="color: blue">' . $comment->comment_name . '</p>
+                <p>' . $comment->comment . '</p>
+            </div>
+        </div>
+        <p></p>';
             }
+
         }
         echo $output;
     }
@@ -319,20 +363,24 @@ class ProductController extends Controller
     public function list_comment()
     {
         $this->check();
-        $comment = Comment::with('product')
+        $comments = Comment::with('product')
             ->OrderBy('comment_date', 'desc')
             ->where('comment_parent_comment', null)
             ->get();
-        return view('admin.comment.list_comment')->with(compact('comment'));
+        return view('admin.comment.list_comment')->with(compact('comments'));
     }
      public function delete_comment($comment_id){
          $comment = Comment::findOrFail($comment_id);
+         $commentreply = Comment::where('comment_parent_comment',$comment_id);
+         $result_reply = $commentreply->delete();
          $result = $comment->delete();
          if($result){
-             Session::put('message','Xóa mã giảm giá thành công');
+             toastr()->success('Xóa bình luận thành công');
+             Session::put('message','Xóa bình luận thành công');
              return Redirect::to('list-comment');
          }else{
-             Session::put('message','Xóa mã giảm giá thất bại');
+             toastr()->error('Xóa bình luận thất bại');
+             Session::put('message','Xóa bình luận thất bại');
              return Redirect::to('list-comment');
          }
      }
@@ -363,18 +411,14 @@ class ProductController extends Controller
     }
     public function wishlist(Request $request)
     {
-        $meta_desc = "Cung cấp thức ăn cho thú cưng";
-        $meta_keywords = "thucanchocho, thucanchomeo, thức ăn thú cưng";
         $meta_title = "MVPetShop.vn | Danh sách yêu thích";
-        $url_canonical = $request->url();
-        $category = Category::whereNotIn('category_id',[21,25])->get();
+        $category = Category::whereNotIn('category_id',[21])->get();
         $user_id = Session::get('customer_id');
         $wishlist = Favorite::where('user_id', $user_id)->where('del_flg', 0)->get();
-        // dd($user_id);
         if (!$user_id) {
-            return view('pages.checkout.login_checkout', compact('category', 'meta_desc', 'meta_keywords', 'meta_title', 'url_canonical'));
+            return view('pages.checkout.login_checkout', compact('category', 'meta_title'));
         } else {
-            return view('pages.wishlist.wishlist', compact('category', 'wishlist', 'meta_desc', 'meta_keywords', 'meta_title', 'url_canonical'));
+            return view('pages.wishlist.wishlist', compact('category', 'wishlist', 'meta_title'));
         }
     }
     public function addWishlist(Request $request, $product_favorite_id)
@@ -410,7 +454,16 @@ class ProductController extends Controller
     }
     public function delWishlist($product_favorite_id)
     {
-        Favorite::where('product_favorite_id', $product_favorite_id)->update(['del_flg' => 1]);
+
+//        Favorite::where('product_favorite_id', $product_favorite_id)->update(['del_flg' => 1]);
+        $user_id = Session::get('customer_id');
+        $favorite = Favorite::where('product_id', $product_favorite_id)->where('user_id',$user_id)->get();
+        if ($favorite->count() > 0) {
+            $favorite->first()->delete();
+            toastr()->success('Xóa thành công !!');
+        } else {
+            toastr()->error('Xóa thất bại !!');
+        }
         return redirect()->back();
     }
 }

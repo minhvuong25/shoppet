@@ -34,12 +34,9 @@ class CartController extends Controller
     }
     public function show_cart(Request $request)
     {
-        $meta_desc = "Chuyên bán máy ảnh và phụ kiện máy ảnh";
-        $meta_keywords = "may anh, máy ảnh, phụ kiện,phu kien, phụ kiện máy ảnh, phu kien may anh";
-        $url_canonical = $request->url();
         $meta_title = "MVPetShop.vn | Giỏ hàng ";
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderBy('category_id', 'desc')->get();
-        return view('cart.show_cart')->with('category', $cate_product)->with(compact('meta_desc', 'meta_keywords', 'meta_title', 'url_canonical'));
+        return view('cart.show_cart')->with('category', $cate_product)->with(compact( 'meta_title'));
     }
     // public function delete_to_cart($rowId){
     //     Cart::update($rowId,0);
@@ -90,17 +87,14 @@ class CartController extends Controller
         }
         Session::put('cart', $cart);
         Session::save();
+        return count(Session::get('cart'));
     }
 
     public function gio_hang(Request $request)
     {
-        $meta_desc = "Chuyên bán thú cưng và phụ kiện thú cưng";
-        $meta_keywords = "gio hang";
-        $url_canonical = $request->url();
         $meta_title = "MVPetShop.vn | Giỏ hàng ";
-
-        $cate_product = Category::where('category_status', '0')->whereNotIn('category_id',[21])->orderBy('category_id', 'desc')->get();
-        return view('cart.cart_ajax')->with('category', $cate_product)->with(compact( 'meta_keywords', 'meta_desc','meta_title', 'url_canonical'));
+        $cate_product = Category::where('category_status', '1')->whereNotIn('category_id',[21])->orderBy('category_id', 'desc')->get();
+        return view('cart.cart_ajax')->with('category', $cate_product)->with(compact( 'meta_title'));
     }
     public function delete_sp($session_id)
     {
@@ -184,6 +178,7 @@ class CartController extends Controller
                                 Session::put('coupon', $cou);
                             }
                             Session::save();
+
                             return redirect()->back()->with('message', 'Áp dụng mã thành công');
                         }
                     } else {
@@ -196,42 +191,8 @@ class CartController extends Controller
                 }
             }
         } else {
-            $now = strtotime(Carbon::now('Asia/Ho_Chi_Minh'));
-            $coupon = Coupon::where('coupon_code', $data['coupon'])->where('coupon_status', 1)->where('coupon_date_end', '>=', $now)->first();
-            if ($coupon) {
-                if ($coupon->coupon_times > 0) {
-                    $count_coupon = $coupon->count();
-                    if ($count_coupon > 0) {
-                        $coupon_session = Session::get('coupon');
-                        if ($coupon_session == true) {
-                            $is_avaiable = 0;
-                            if ($is_avaiable == 0) {
-                                $cou[] = array(
-                                    'coupon_code' => $coupon->coupon_code,
-                                    'coupon_condition' => $coupon->coupon_condition,
-                                    'coupon_number' => $coupon->coupon_number,
-                                );
-                                Session::put('coupon', $cou);
-                            }
-                        } else {
-                            $cou[] = array(
-                                'coupon_code' => $coupon->coupon_code,
-                                'coupon_condition' => $coupon->coupon_condition,
-                                'coupon_number' => $coupon->coupon_number,
-                            );
-                            Session::put('coupon', $cou);
-                        }
-                        Session::save();
-                        return redirect()->back()->with('message', 'Áp dụng mã thành công');
-                    }
-                } else {
-                    Session::forget('coupon');
-                    return redirect()->back()->with('message', 'Mã giảm giá đã hết số lần sử dụng');
-                }
-            } else {
-                Session::forget('coupon');
-                return redirect()->back()->with('message', 'Mã giảm giá không tồn tại hoặc hết hạn');
-            }
+            toastr()->warning('bạn phải đăng nhập trước khi áp dụng mã giảm giá');
+            return redirect()->route('Login');
         }
     }
     public function del_cou()
@@ -242,19 +203,4 @@ class CartController extends Controller
             return redirect()->back()->with('message', 'Xóa mã thành công');
         }
     }
-    // public function showCartMenu()
-    // {
-    //     $countCart = count(Session::get('cart'));
-    //     $output = '';
-    //     if ($countCart > 0) {
-    //         $output .= '
-    //         <li><a href="' . url('/gio-hang') . '">Giỏ hàng<small class="badges">' . $countCart . '</small></a></li>
-    //         ';
-    //     } else {
-    //         $output .= '
-    //             <li><a href="' . url('/gio-hang') . '">Giỏ hàng<small class="badges">1</small></a></li>
-    //             ';
-    //     }
-    //     echo $output;
-    // }
 }

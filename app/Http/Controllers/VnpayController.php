@@ -17,16 +17,28 @@ class VnpayController extends Controller
 {
     public function store(Request $request){
 
-        dd($request->all());
+        $total_price = $request->total_price;
+        $data=['shipping_email' => $request->email,
+        'shipping_name' => $request->name,
+        'shipping_address' => $request->address,
+        'shipping_phone' => $request->phone,
+        'shipping_notes' => $request->name,
+        'shipping_method' => $request->payment_select,
+        'order_fee' => $request->order_fee,
+        'order_payment' => 'vnpay',
+        'order_coupon' => $request->order_coupon,
+        ];
+
+
         $vnp_Url = config('vnpay.vnp_Url');
-        $vnp_Returnurl = route('Home');
+        $vnp_Returnurl = route('checkout_online');
         $vnp_TmnCode = config('vnpay.vnp_TmnCode');//Mã website tại VNPAY
         $vnp_HashSecret = config('vnpay.vnp_HashSecret'); //Chuỗi bí mật
 
         $vnp_TxnRef = rand(1,500000000); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'VNP';
         $vnp_OrderType = 'Banking';
-        $vnp_Amount = 100000 * 100;
+        $vnp_Amount = $total_price * 100;
         $vnp_Locale = 'vn';
         $vnp_BankCode = '';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -110,30 +122,32 @@ class VnpayController extends Controller
             $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
+
         $returnData = array('code' => '00'
         , 'message' => 'success'
         , 'data' => $vnp_Url);
+        $this->confirm_order($data);
         return redirect($vnp_Url);
     }
-    public function confirm_order(Request $request)
+    public function confirm_order($data)
     {
-        $data = $request->all();
         if (Session::get('cart')) {
             foreach (Session::get('cart') as $key => $cart) {
                 $id = $cart['product_id'];
                 // $coupon = $data['order_coupon'];
                 // $fee = $data['order_fee'];
             }
-            $checkProduct = Product::where('product_id', $id)->where('product_status', 0)->first();
-            if (!$checkProduct) {
+            $checkPet = Product::where('product_id', $id)->where('product_status', 0)->first();
+            //kieemr tra pet ton tai hay khong
+            if (!$checkPet) {
                 Session::forget('coupon');
                 Session::forget('fee');
                 Session::forget('cart');
                 return response()->json([
                     'data' => 'Kotontai'
                 ]);
-                // dd('ko ton tai');
-            } elseif ($cart['product_qty'] > $checkProduct->product_quantity) {
+                // kiem tra so luong pet
+            } elseif ($cart['product_qty'] > $checkPet->product_quantity) {
                 Session::forget('coupon');
                 Session::forget('fee');
                 Session::forget('cart');
@@ -173,7 +187,8 @@ class VnpayController extends Controller
                 $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
                 $date_order = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
                 $order->created_at = $today;
-                $order->order_date = $date_order;
+                $order->order_date = $date_order; //payment_method
+                $order->order_payment =  $data['order_payment'];
                 $order->save();
                 if (Session::get('cart') == true) {
                     foreach (Session::get('cart') as $key => $cart) {
@@ -218,13 +233,13 @@ class VnpayController extends Controller
                 );
                 $ordercode_mail = array(
                     'coupon_code' => $coupon_mail,
+                    'order_payment' => $data['order_payment'],
                     'order_code' => $checkout_code,
                     // 'coupon_number'=> $coupon_number,
                     // 'coupon_condition'=> $coupon_condition,
                 );
                 Mail::send('pages.mail.mail_order', ['cart_array' => $cart_array, 'shipping_array' => $shipping_array, 'code' => $ordercode_mail], function ($message) use ($title_mail, $data) {
                     $message->to($data['email'])->subject($title_mail);
-                    $message->from($data['email'], $title_mail);
                 });
                 Session::forget('coupon');
                 Session::forget('fee');

@@ -56,14 +56,7 @@
               <td>{{$shipping->shipping_phone}}</td>
               <td>{{$shipping->shipping_notes}}</td>
               <td>
-                @if ($shipping->shipping_method==0)
-                    Chuyển khoản
-                @elseif ($shipping->shipping_method==1)
-                    Tiền mặt
-                @else
-                    Thanh toán qua paypal
-                @endif
-
+                  {{$order_payment}}
               </td>
             </tr>
           </tbody>
@@ -105,10 +98,18 @@
               <td>{{$i}}</td>
               <td>{{$ord_d->product_name}}</td>
               <td>{{$ord_d->product->product_quantity}}</td>
-              <td>
-                <input type="number" min="1"  readonly="readonly" class="order_qty_{{$ord_d->product_id}}" value="{{$ord_d->product_sales_quantity}}" name="product_sale_quantity" oninput="this.value = Math.abs(this.value)">
-                <input type="hidden" name="order_qty_storage" id="" class="order_qty_storage_{{$ord_d->product_id}}" value="{{$ord_d->product->product_quantity}}">
-                <input type="hidden" name="order_product_id" id="" class="order_product_id" value="{{$ord_d->product_id}}">
+{{--              <td>--}}
+{{--                <input type="number" min="1"  readonly="readonly" class="order_qty_{{$ord_d->product_id}}" value="{{$ord_d->product_sales_quantity}}" name="product_sale_quantity" oninput="this.value = Math.abs(this.value)">--}}
+{{--                <input type="hidden" name="order_qty_storage" id="" class="order_qty_storage_{{$ord_d->product_id}}" value="{{$ord_d->product->product_quantity}}">--}}
+{{--                <input type="hidden" name="order_product_id" id="" class="order_product_id" value="{{$ord_d->product_id}}">--}}
+{{--            </td>--}}
+                <td>
+                    <label>
+                        {{$ord_d->product_sales_quantity}}
+{{--                        <input type="number" min="1"  readonly="readonly" class="order_qty_{{$ord_d->product_id}}" value="{{$ord_d->product_sales_quantity}}" name="product_sale_quantity" oninput="this.value = Math.abs(this.value)">--}}
+                    </label>
+                    {{--                <input type="hidden" name="order_qty_storage" id="" class="order_qty_storage_{{$ord_d->product_id}}" value="{{$ord_d->product->product_quantity}}">--}}
+{{--                <input type="hidden" name="order_product_id" id="" class="order_product_id" value="{{$ord_d->product_id}}">--}}
             </td>
               <td>{{number_format($ord_d->product_price)}} VND</td>
               <td>{{number_format($subtotal)}} VND</td>
@@ -167,29 +168,38 @@
                                 @csrf
                                 <select class="form-control order_details">
                                     <option id="{{$or->order_id}}" value="1" selected>Chưa xử lý</option>
-                                    <option id="{{$or->order_id}}" value="2">Xác nhận đơn hàng</option>
+                                    <option id="{{$or->order_id}}" value="2">Xác nhận đơn hàng và đang giao</option>
                                     <option id="{{$or->order_id}}" value="3">Hủy đơn</option>
-{{--                                    <option id="{{$or->order_id}}" value="4" >Xác nhận</option>--}}
                                 </select>
                             </form>
                         @elseif ($or->order_status==2)
                             <form action="">
                                 @csrf
-                                <select class="form-control order_details" disabled>
-                                    <option id="{{$or->order_id}}" value="1">Chưa xử lý</option>
-                                    <option id="{{$or->order_id}}" value="2" selected >Xác nhận đơn hàng</option>
-                                    <option id="{{$or->order_id}}" value="3">Hủy đơn</option>
+                                <select class="form-control order_details" >
+                                    <option id="{{$or->order_id}}" value="2" selected >Xác nhận đơn hàng và đang giao</option>
+                                    <option id="{{$or->order_id}}" value="4" >Đã Giao</option>
                                 </select>
                             </form>
                         @elseif ($or->order_status==3)
                         <form action="">
                             @csrf
-                            <select class="form-control order_details" disabled>
+                            <select class="form-control order_details" disabled >
                                 <option id="{{$or->order_id}}" value="1">Chưa xử lý</option>
-                                <option id="{{$or->order_id}}" value="2">Xác nhận đơn hàng</option>
+                                <option id="{{$or->order_id}}" value="2">Xác nhận đơn hàng và đang giao</option>
                                 <option id="{{$or->order_id}}" value="3" selected >Hủy đơn</option>
+                                <option id="{{$or->order_id}}" value="4" >Đã Giao</option>
                             </select>
                         </form>
+                        @elseif($or->order_status== 4)
+                            <form action="">
+                                @csrf
+                                <select class="form-control order_details" disabled>
+                                    <option id="{{$or->order_id}}" value="1">Chưa xử lý</option>
+                                    <option id="{{$or->order_id}}" value="2">Xác nhận đơn hàng và đang giao</option>
+                                    <option id="{{$or->order_id}}" value="3">Hủy đơn</option>
+                                    <option id="{{$or->order_id}}" value="4" selected>Đã Giao</option>
+                                </select>
+                            </form>
                         @endif
                     @endforeach
                 </td>

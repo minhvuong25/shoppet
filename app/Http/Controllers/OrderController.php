@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Shipping;
@@ -17,7 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use PDF;
 use Illuminate\Support\Facades\URL;
-
+use App\Mail\OrderStatusUpdatedMail;
 class OrderController extends Controller
 {
     public function check()
@@ -33,6 +35,7 @@ class OrderController extends Controller
     {
         $this->check();
         $order = Order::orderby('created_at', 'desc')->get();
+//        $order = Order::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.manager.manager_order')->with(compact('order'));
     }
     public function view_order($order_code)
@@ -42,8 +45,8 @@ class OrderController extends Controller
         foreach ($order as $key => $ord) {
             $customer_id = $ord->customer_id;
             $shipping_id = $ord->shipping_id;
-
         }
+        $order_payment = Order::where('order_code', $order_code)->first()->order_payment;
         $customer = Customer::where('customer_id', $customer_id)->first();
         $shipping = Shipping::where('shipping_id', $shipping_id)->first();
         $order_details_pro = OrderDetail::with('product')->where('order_code', $order_code)->get();
@@ -59,7 +62,7 @@ class OrderController extends Controller
             $coupon_condition = 2;
             $coupon_number = 0;
         }
-        return view('admin.manager.view_order')->with(compact('order_details', 'order_details_pro', 'customer', 'shipping', 'coupon_condition', 'coupon_number', 'order'));
+        return view('admin.manager.view_order')->with(compact('order_details', 'order_details_pro', 'customer', 'shipping', 'coupon_condition', 'coupon_number', 'order','order_payment'));
     }
      public function delete_order($order_code){
 
@@ -132,8 +135,7 @@ class OrderController extends Controller
                 }
                 </style>
                 <center>
-                    <img src="' . URL::to('/frontend/images/download.png') . '" width="50px">
-                    <h1>Công ty TNHH MV</h1>
+                    <h1>Cửa hàng MV-PETSHOP</h1>
                 </center>
             <h4><center>Độc lập - Tự do - Hạnh phúc</center></h4>
         <table class="table-styling">
@@ -249,10 +251,21 @@ class OrderController extends Controller
 //
     public function update_order_qty(Request $request)
     {
-        $data = $request->all();
-        $order = Order::find($data['order_id']);
-        $order->order_status = $data['order_status'];
-        $order->save();
+            $data = $request->all();
+            $order = Order::find($data['order_id']);
+            $order->order_status = $data['order_status'];
+            $order->save();
+
+// Gửi email cập nhật trạng thái đơn hàng cho khách hàng
+        $title_mail ="Cập nhật trạng thái đơn hàng";
+
+        Mail::send('admin.mail.order_status_updated', ['order' => $order], function ($message) use ($title_mail, $data) {
+            $email = DB::table('tbl_order')
+                ->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
+                ->where('tbl_order.order_id', $data['order_id'])
+                ->value('tbl_customer.customer_email');
+            $message->to($email)->subject($title_mail);
+        });
         //order date
         $order_date = $order->order_date;
         $statistic = Statistic::where('order_date', $order_date)->get();

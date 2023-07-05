@@ -51,7 +51,7 @@
     <script src="{{ asset('/backend/js/morris.js') }}"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    {{-- <script src="{{asset('/backend/js/ckeditor.js')}}"></script> --}}
+{{--     <script src="{{asset('/backend/js/ckeditor.js')}}"></script> --}}
     <script src="{{asset('/ckeditor/ckeditor.js')}}"></script>
     <script>
         $(document).ready(function() {
@@ -395,13 +395,13 @@
                     var order_qty_storage = $('.order_qty_storage_' + order_product_id[i]).val();
                     if (parseInt(order_qty) > parseInt(order_qty_storage)) {
                         j = j + 1;
-                        if (j == 1) {
+                        if (j === 1) {
                             alert('Số lượng không đủ');
                         }
                         $('.color_qty_' + order_product_id[i]).css('background', '#000')
                     }
                 }
-                if (j == 0) {
+                if (j === 0) {
                     $.ajax({
                         url: '{{ url::to('/update-order-qty') }}',
                         method: 'POST',
@@ -413,7 +413,7 @@
                             order_product_id: order_product_id
                         },
                         success: function(data) {
-                            alert('Cập nhật số lượng thành công');
+                            alert('Cập nhật trạng thái thành công');
                             location.reload();
                         }
                     });
@@ -569,6 +569,9 @@
                     },
                     success: function(data) {
                         $('.reply_comment_' + comment_id).val('');
+                        $('#reply_cmt').hide()
+                        $('#btn_reply_cmt').hide()
+                        $('.noti_status').html('<span>Đã trả lời</span>')
                         $('#notify_comment').html('<span class="text text-alert">Đã trả lời</span>');
                         $('#notify_comment').fadeOut(2000);
                     }
@@ -599,10 +602,10 @@
                             value: <?php echo $product; ?>,
                             color: colorDanger
                         },
-                        // {
-                        //     label: "Bài viết",
-                        //     value: <?php echo $product; ?>
-                        // },
+                         {{--{--}}
+                         {{--    label: "Bài viết",--}}
+                         {{--    value: <?php echo $product; ?>--}}
+                         {{--},--}}
                         {
                             label: "Đơn hàng",
                             value: <?php echo $app_order; ?>

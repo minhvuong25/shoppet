@@ -9,7 +9,7 @@
 </head>
 <body>
     <h2>{{ $coupon['coupon_times'] }}</h2>
-    <h1>Gửi mã khuyến mãi</h1> <a href="http://MVPetShop.net/camera" target="_blank"></a>
+    <h1>Gửi mã khuyến mãi</h1> <a href="https://shoppet.com/" target="_blank"></a>
     <h2>Mã khuyến mãi : HDASDWDA</h2>
 </body>
 </html>

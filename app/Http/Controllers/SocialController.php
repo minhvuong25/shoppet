@@ -37,6 +37,7 @@ class SocialController extends Controller
     }
     public function addPost(Request $request){
         $post = new Post();
+
         $post->customer_id = Session::get('customer_id');
         $post->category_mxh_id = $request->post_desc_mxh;
         $post->post_desc = $request->post_desc;
@@ -98,12 +99,13 @@ class SocialController extends Controller
         return view('mxh.all_post',compact('posts','keyword','allPost'));
     }
 
-    public function edit(){
+    public function edit(Request $request,$post_id){
+
         $isPro = false;
         $cateMxh = MXH::orderBy('category_mxh_id', 'asc')->get();
         $customer = Customer::where('customer_id', Session::get('customer_id'))->first();
-        $postUser = Post::where('customer_id',Session::get('customer_id'))->get();
-        return view('mxh.profile',compact('isPro','cateMxh', 'customer','postUser'));
+        $postUser = Post::where('customer_id',Session::get('customer_id'))->where('post_id',$post_id)->get();
+        return view('mxh.edit_post',compact('isPro','cateMxh', 'customer','postUser'));
     }
 
     public function savePost(Request $request)

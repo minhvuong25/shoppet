@@ -1,5 +1,7 @@
 @extends('layout')
 @section('content')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <section id="form">
         <!--form-->
         <div class="container">
@@ -21,14 +23,18 @@
 
                             <div class="btn-box" style="display: flex">
                                 <button type="submit">
-                                    Đăng nhập
+                                   Đăng nhập
                                 </button>
                                 <ul>
+{{--                                    <li><a href="{{ URL::to('/login-customer-facebook') }}"> <i class="fa-brands fa-facebook"></i></a>--}}
                                     <li><a href="{{ URL::to('/login-customer-facebook') }}">Đăng nhập bằng Facebook</a>
                                     </li>
-                                    <li><a href="{{ URL::to('/login-customer-google') }}">Đăng nhập bằng Google</a></li>
+{{--                                    <li><a href="{{ URL::to('/login-customer-google') }}"><i class="fa-brands fa-google"></i></a></li>--}}
+                                    <li><a href="{{ URL::to('/login-customer-google') }}">Đăng nhập bằng Google</i></a></li>
                                 </ul>
                             </div>
+
+
                         </form>
                     </div>
                     <!--/login form-->

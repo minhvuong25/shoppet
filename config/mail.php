@@ -32,18 +32,28 @@ return [
     |            "postmark", "log", "array", "failover"
     |
     */
-
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
+            'encryption' =>  'tls',
+            'username' => 'vuong9xx@gmail.com',
+            'password' => 'tgenodhzyiavwaqo',
             'timeout' => null,
             'auth_mode' => null,
         ],
+//        'mailers' => [
+//        'smtp' => [
+//            'transport' => 'smtp',
+//            'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
+//            'port' => env('MAIL_PORT', 587),
+//            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+//            'username' => env('MAIL_USERNAME'),
+//            'password' => env('MAIL_PASSWORD'),
+//            'timeout' => null,
+//            'auth_mode' => null,
+//        ],
         // 'stream' =>[
         //     'ssl' => [
         //         'allow_self_signed' =>true,
@@ -98,9 +108,13 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'vuongminhnguyen.com'),
-        'name' => env('MAIL_FROM_NAME', 'MVPetShop'),
+        'address' => 'vuong9xx@gmail.com',
+        'name' =>    'MVPetShop',
     ],
+//    'from' => [
+//        'address' => env('MAIL_FROM_ADDRESS', 'vuongminhnguyen.com'),
+//        'name' => env('MAIL_FROM_NAME', 'MVPetShop'),
+//    ],
 
     /*
     |--------------------------------------------------------------------------

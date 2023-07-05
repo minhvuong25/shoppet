@@ -50,6 +50,17 @@ class CheckoutController extends Controller
             return redirect('trang-chu');
         }
     }
+    public function login_checkout_online(Request $request)
+    {
+        $meta_title = "MVPetShop.vn | Đăng nhập";
+        $cate_product = DB::table('tbl_category')->where('category_status', '1')->orderBy('category_id', 'desc')->get();
+        $auth = Session::get('customer_id');
+        if (!$auth) {
+            return view('pages.checkout.login_checkout')->with('category', $cate_product)->with(compact( 'meta_title'));
+        } else {
+            return view('pages.checkout.checkout_online')->with('category', $cate_product)->with(compact( 'meta_title'));
+        }
+    }
     //THêm customer khi đăng kí
     public function add_customer(Request $request)
     {
@@ -60,28 +71,14 @@ class CheckoutController extends Controller
         $data['customer_email'] = $request->customer_email;
         $data['customer_password'] = md5($request->customer_password);
         $data['customer_phone'] = $request->customer_phone;
-//        $data['confirmation_token'] = $confirmationToken;
         $exitEmail = Customer::where('customer_email', $request->customer_email)->where('customer_phone', $request->customer_phone)->first();
         if ($exitEmail == '') {
-//            $data_mail = [
-//                'user' => $data,
-//                'confirmationLink' => 'http://127.0.0.1:8000/confirm-create-account/' .$confirmationToken,
-//            ];
-//
-//            Mail::send('pages.user.confirm_account', $data_mail, function ($message) use ($request) {
-//                $message->to($request->customer_email, $request->customer_name)
-//                    ->subject('Xác nhận tài khoản')
-//                    ->from($request->customer_email,$request->customer_name)
-//                ;
-//            });
             $customer_id = Customer::insertGetId($data);
             Session::put('customer_id', $customer_id);
             Session::put('customer_name', $data['customer_name']);
             Session::put('data_insert', $data);
             Session::put('confirmationToken', $confirmationToken);
-//            return redirect()->back()->with('message', 'Kiểm tra mail');
-
-            return Redirect::to('/checkout');
+            return Redirect::to('/trang-chu');
         } else {
             return redirect()->back()->with('message', 'Tên email hoặc số điện thoại đã tồn tại');
         }
@@ -155,24 +152,17 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         $city = City::orderBy('matp', 'asc')->get();
-        $meta_desc = "Chuyên bán máy ảnh và phụ kiện máy ảnh";
-        $meta_keywords = "may anh, máy ảnh, phụ kiện,phu kien, phụ kiện máy ảnh, phu kien may anh";
-        $url_canonical = $request->url();
         $meta_title = "MVPetShop.vn | Thanh toán";
-        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderBy('category_id', 'desc')->get();
-
-        return view('pages.checkout.checkout')->with('category', $cate_product)->with(compact('meta_desc', 'meta_keywords', 'meta_title', 'url_canonical', 'city'));
+        $cate_product = DB::table('tbl_category')->where('category_status', '1')->orderBy('category_id', 'desc')->get();
+        return view('pages.checkout.checkout')->with('category', $cate_product)->with(compact( 'meta_title','city'));
     }
     public function checkout_online(Request $request)
     {
         $city = City::orderBy('matp', 'asc')->get();
-        $meta_desc = "Chuyên bán máy ảnh và phụ kiện máy ảnh";
-        $meta_keywords = "may anh, máy ảnh, phụ kiện,phu kien, phụ kiện máy ảnh, phu kien may anh";
-        $url_canonical = $request->url();
         $meta_title = "MVPetShop.vn | Thanh toán";
-        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderBy('category_id', 'desc')->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '1')->orderBy('category_id', 'desc')->get();
 
-        return view('pages.checkout.checkout_online')->with('category', $cate_product)->with(compact('meta_desc', 'meta_keywords', 'meta_title', 'url_canonical', 'city'));
+        return view('pages.checkout.checkout_online')->with('category', $cate_product)->with(compact( 'meta_title' ,'city'));
     }
     public function save_checkout(Request $request)
     {
@@ -189,24 +179,19 @@ class CheckoutController extends Controller
     }
     public function payment()
     {
-        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderBy('category_id', 'desc')->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '1')->orderBy('category_id', 'desc')->get();
 
         return view('pages.checkout.payment')->with('category', $cate_product);
     }
     public function logout_checkout(Request $request)
     {
-        $meta_desc = "Chuyên bán máy ảnh và phụ kiện máy ảnh";
-        $meta_keywords = "may anh, máy ảnh, phụ kiện,phu kien, phụ kiện máy ảnh, phu kien may anh";
-        $url_canonical = $request->url();
+
         $meta_title = "MVPetShop.vn | Đăng nhập";
         Session::flush();
-        return Redirect::to('/login-checkout')->with(compact('meta_desc', 'meta_keywords', 'meta_title', 'url_canonical'));
+        return Redirect::to('/login-checkout')->with(compact( 'meta_title'));
     }
     public function login_customer(Request $request)
     {
-        $meta_desc = "Chuyên bán máy ảnh và phụ kiện máy ảnh";
-        $meta_keywords = "may anh, máy ảnh, phụ kiện,phu kien, phụ kiện máy ảnh, phu kien may anh";
-        $url_canonical = $request->url();
         $meta_title = "MVPetShop.vn | Đăng nhập";
         $email = $request->email_account;
         $password = md5($request->password_account);
@@ -218,7 +203,7 @@ class CheckoutController extends Controller
             return redirect()->back();
         } else {
             toastr()->error('Email hoặc mật khẩu không đúng !!!');
-            return Redirect::to('/login-checkout')->with(compact('meta_desc', 'meta_keywords', 'meta_title', 'url_canonical'))->with('message', 'Email hoặc mật khẩu không đúng !!!');
+            return Redirect::to('/login-checkout')->with(compact( 'meta_title',))->with('message', 'Email hoặc mật khẩu không đúng !!!');
         }
     }
     public function order_place(Request $request)
@@ -326,16 +311,17 @@ class CheckoutController extends Controller
                 // $coupon = $data['order_coupon'];
                 // $fee = $data['order_fee'];
             }
-            $checkProduct = Product::where('product_id', $id)->where('product_status', 0)->first();
-            if (!$checkProduct) {
+            $checkPet = Product::where('product_id', $id)->where('product_status', 0)->first();
+            //kieemr tra pet ton tai hay khong
+            if (!$checkPet) {
                 Session::forget('coupon');
                 Session::forget('fee');
                 Session::forget('cart');
                 return response()->json([
                     'data' => 'Kotontai'
                 ]);
-                // dd('ko ton tai');
-            } elseif ($cart['product_qty'] > $checkProduct->product_quantity) {
+                // kiem tra so luong pet
+            } elseif ($cart['product_qty'] > $checkPet->product_quantity) {
                 Session::forget('coupon');
                 Session::forget('fee');
                 Session::forget('cart');
@@ -375,7 +361,8 @@ class CheckoutController extends Controller
                     $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
                     $date_order = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
                     $order->created_at = $today;
-                    $order->order_date = $date_order;
+                    $order->order_date = $date_order; //payment_method
+                    $order->order_payment =  $data['order_payment'];
                     $order->save();
                     if (Session::get('cart') == true) {
                         foreach (Session::get('cart') as $key => $cart) {
@@ -390,43 +377,43 @@ class CheckoutController extends Controller
                             $order_details->save();
                         }
                     }
-                    $now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y H:i:s');
-                    $title_mail = "Đơn hàng xác nhận" . ' ' . $now;
-                    $customer = Customer::find(Session::get('customer_id'));
-                    $data['email'][] = $customer->customer_email;
-                    if (Session::get('cart') == true) {
-                        foreach (Session::get('cart') as $key => $cart_mail) {
-                            $cart_array[] = array(
-                                'product_name' => $cart_mail['product_name'],
-                                'product_price' => $cart_mail['product_price'],
-                                'product_qty' => $cart_mail['product_qty'],
-                            );
-                        }
+                $now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y H:i:s');
+                $title_mail = "Đơn hàng xác nhận" . ' ' . $now;
+                $customer = Customer::find(Session::get('customer_id'));
+                $data['email'][] = $customer->customer_email;
+                if (Session::get('cart') == true) {
+                    foreach (Session::get('cart') as $key => $cart_mail) {
+                        $cart_array[] = array(
+                            'product_name' => $cart_mail['product_name'],
+                            'product_price' => $cart_mail['product_price'],
+                            'product_qty' => $cart_mail['product_qty'],
+                        );
                     }
-                    if (Session::get('fee') == true) {
-                        $fee = Session::get('fee');
-                    } else {
-                        $fee = 20000;
-                    }
-                    $shipping_array = array(
-                        'fee' => $fee,
-                        'customer_name' => $customer->name,
-                        'shipping_name' => $data['shipping_name'],
-                        'shipping_email' => $data['shipping_email'],
-                        'shipping_phone' => $data['shipping_phone'],
-                        'shipping_address' => $data['shipping_address'],
-                        'shipping_notes' => $data['shipping_notes'],
-                        'shipping_method' => $data['shipping_method'],
-                    );
-                    $ordercode_mail = array(
-                        'coupon_code' => $coupon_mail,
-                        'order_code' => $checkout_code,
-                        // 'coupon_number'=> $coupon_number,
-                        // 'coupon_condition'=> $coupon_condition,
-                    );
+                }
+                if (Session::get('fee') == true) {
+                    $fee = Session::get('fee');
+                } else {
+                    $fee = 20000;
+                }
+                $shipping_array = array(
+                    'fee' => $fee,
+                    'customer_name' => $customer->name,
+                    'shipping_name' => $data['shipping_name'],
+                    'shipping_email' => $data['shipping_email'],
+                    'shipping_phone' => $data['shipping_phone'],
+                    'shipping_address' => $data['shipping_address'],
+                    'shipping_notes' => $data['shipping_notes'],
+                    'shipping_method' => $data['shipping_method'],
+                );
+                $ordercode_mail = array(
+                    'coupon_code' => $coupon_mail,
+                    'order_payment' => $data['order_payment'],
+                    'order_code' => $checkout_code,
+                    // 'coupon_number'=> $coupon_number,
+                    // 'coupon_condition'=> $coupon_condition,
+                );
                     Mail::send('pages.mail.mail_order', ['cart_array' => $cart_array, 'shipping_array' => $shipping_array, 'code' => $ordercode_mail], function ($message) use ($title_mail, $data) {
                         $message->to($data['email'])->subject($title_mail);
-                        $message->from($data['email'], $title_mail);
                     });
                     Session::forget('coupon');
                     Session::forget('fee');

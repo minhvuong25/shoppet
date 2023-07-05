@@ -6,8 +6,6 @@
             <div class="container" style="margin-top:20px">
                 <div class="col-sm-5">
                     <div class="view-product">
-                        <div class="fb-like" data-href="{{ $url_canonical }}" data-width=""
-                            data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
                     </div>
                     <form action="">
                         @csrf
@@ -46,16 +44,18 @@
                         <label class="brand_name">Thương hiệu :</label>
                         <span class="brand_name"><a href="{{ URL::to('product-by-category', ['category_id' => $show->category_id]) }}" style="color: red">{{ $show->category_name }}</a></span>
                         <form action="{{ URL::to('/save-cart') }}" method="POST">
+
                             {{ csrf_field() }}
                             <br>
                             @php
                                 $show->product_sale_after = $show->product_price - ($show->product_price * $show->product_sale) / 100;
                             @endphp
                             @if ($show->product_sale)
+
                                 <span class="price d-flex brand_name">
                                     <div class="d-flex">
                                         <span
-                                            class="price" style="display: flex;margin-right:5px">{{ number_format($show->product_sale_after) }}</span>
+                                            class="price" style="display: flex;margin-right:5px">Giá:  {{ number_format($show->product_sale_after) }}</span>
                                         <div class="m-0-5" style="margin-left:5px"> VND</div>
                                     </div>
                                     <strike class="m-0-5 d-flex mausay" style="margin-left:5px">{{ number_format($show->product_price) }}<div>
@@ -78,21 +78,7 @@
                     if($show->product_quantity==0){
                 ?>
                             <span class="brand_name">Hết hàng</span><br>
-                            <ul class="list-inline rating" title="Average Rating">
-                                @for ($count = 1; $count <= 5; $count++)
-                                    @php
-                                        if ($count <= $rating) {
-                                            $color = 'color:#ffcc00;';
-                                        } else {
-                                            $color = 'color:#ccc;';
-                                        }
-                                    @endphp
-                                    <li title="title_rating" class="rating"
-                                        style="{{ $color }} font-size:15px;">
-                                        &#9733;</li>
-                                @endfor
 
-                            </ul>
                             <fieldset>
                                 <legend class="brand_name" style="font-weight: 500">Tags</legend>
                                 <p><i class="fa fa-tag"></i>
@@ -113,20 +99,7 @@
                     }else{
                     ?>
                             <span class="brand_name">Còn hàng</span><br>
-                            <ul class="list-inline rating" title="Average Rating">
-                                @for ($count = 1; $count <= 5; $count++)
-                                    @php
-                                        if ($count <= $rating) {
-                                            $color = 'color:#ffcc00;';
-                                        } else {
-                                            $color = 'color:#ccc;';
-                                        }
-                                    @endphp
-                                    <li title="title_rating" class="rating"
-                                        style="{{ $color }} font-size:15px;">
-                                        &#9733;</li>
-                                @endfor
-                            </ul>
+
                             <fieldset>
                                 <legend class="brand_name" style="font-weight: 500">Tags</legend>
                                 <p><i class="fa fa-tag"></i>

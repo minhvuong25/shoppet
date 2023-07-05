@@ -1,10 +1,11 @@
 <html lang="vi-VN">
-<!-- Mirrored from matpetfamily.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 05 May 2022 16:12:07 GMT -->
+<!-- Mirrored from / by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 05 May 2022 16:12:07 GMT -->
 <!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <!-- /Added by HTTrack -->
 
-<link rel="canonical" href="Mạng xã hội thú cưng" />
+{{--<link rel="canonical" href="Mạng xã hội thú cưng" />--}}
+<link rel="canonical" href="{{ URL::to('/pet-mxh') }}" />
 <meta name="robots" content="INDEX,FOLLOW" />
 <meta charset="utf-8">
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
@@ -16,11 +17,13 @@
 <meta property="og:type" content="website">
 {{-- End seo --}}
 <title>Mạng xã hội thú cưng</title>
-<link rel="icon" type="image/x-icon" href="{{ URL::to('//frontend/images/download.png') }}">
+<link rel="icon" type="image/x-icon" href="{{ URL::to('/frontend/images/download.png') }}">
 <script>
     document.documentElement.className = document.documentElement.className + ' yes-js js_active js'
 </script>
-<title>MẬT PET FAMILY</title>
+<title>MV PETSHOP</title>
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
 <link rel='stylesheet' id='font-ionicons-css-css' href='{{ URL::to('/themes/css/ionicons.min.css') }}'
     type='text/css' media='all' />
 <link rel='stylesheet' id='bootstrap-css' href='{{ URL::to('/themes/css/bootstrap.min.css') }}' type='text/css'
@@ -39,8 +42,8 @@
     type='text/css' media='all' />
 <script type="text/javascript" src="{{ asset('/frontend/js/sweet-alert.min.js') }}"></script>
 <link href="{{ asset('/frontend/icon/pe-icon-7-stroke/css/pe-icon-7-stroke.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('/frontend/path/css/font-awesome.min.css') }}">
-<link href="{{ asset('/frontend/lightgallery.min.css/') }}" rel="stylesheet">
+{{--<link rel="stylesheet" href="{{ asset('/frontend/path/css/font-awesome.min.css') }}">--}}
+{{--<link href="{{ asset('/frontend/lightgallery.min.css') }}" rel="stylesheet">--}}
 <link href="{{ asset('/frontend/css/lightslider.css') }}" rel="stylesheet">
 <link href="{{ asset('/frontend/css/prettify.css') }}" rel="stylesheet">
 <link href="{{ asset('/frontend/css/mxh.css') }}" rel="stylesheet">
@@ -49,8 +52,8 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 <link href="{{ asset('/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
-<script src="//cdn.ckeditor.com/4.17.2/full/ckeditor.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
+<script src="{{asset('/ckeditor/ckeditor.js')}}"></script>
+<link rel="stylesheet" href="{{asset('/cdn/sweetalert_113.css')}}">
 <style id='s7upf-theme-style-inline-css' type='text/css'>
     a:hover,
     a:focus,
@@ -268,7 +271,8 @@
 <link rel='stylesheet' id='s7upf-theme-default-css' href='{{ URL::to('/themes/css/style.css') }}'
     type='text/css' media='all' />
 <!--[if lt IE 9]>
-        <link rel='stylesheet' id='vc_lte_ie9-css'  href='https://matpetfamily.com/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css' type='text/css' media='screen' />
+        <link rel='stylesheet' id='vc_lte_ie9-css'  href='{{asset('/cdn/matpetfamily.css')}}'
+type='text/css' media='screen' />
         <![endif]-->
 <link rel='stylesheet' id='js_composer_front-css' href='{{ URL::to('/themes/css/js_composer.min.css') }}'
     type='text/css' media='all' />
@@ -351,13 +355,18 @@
                                             <li id="nav-menu-item-1393"
                                                 class="main-menu-item  menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-1276 current_page_item">
                                                 <a href="{{ URL::to('pet-mxh') }}"
-                                                    class="menu-link main-menu-link">{{ __('Home') }}</a>
+                                                    class="menu-link main-menu-link">{{ __('Các bài viết') }}</a>
+                                            </li>
+                                            <li id="nav-menu-item-1393"  style="margin-inline: 20px"
+                                                class="main-menu-item  menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-1276 current_page_item">
+                                                <a href="{{ URL::to('trang-chu') }}"
+                                                   class="menu-link main-menu-link">{{ __('Trang chủ') }}</a>
                                             </li>
                                             @if(Session::get('customer_id'))
                                             <li id="nav-menu-item-1393" style="margin-inline: 20px"
                                                 class="main-menu-item  menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-1276 current_page_item">
                                                 <a href="{{ route('UserMXH', ['customer_id' => Session::get('customer_id')]) }}"
-                                                   class="menu-link main-menu-link">{{ __('Info') }}</a>
+                                                   class="menu-link main-menu-link">{{ __('Các bài viết đã đăng') }}</a>
                                             </li>
                                             @else
                                                 <li id="nav-menu-item-1393" style="margin-inline: 20px"
@@ -381,7 +390,11 @@
                                                                 width="1400" height="180"
                                                                 src="wp-content/uploads/2018/01/MatPetBanner.png"
                                                                 class="vc_single_image-img attachment-full" alt=""
-                                                                srcset="https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner.png 1400w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-300x39.png 300w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-768x99.png 768w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-1024x132.png 1024w, https://matpetfamily.com/wp-content/uploads/2018/01/MatPetBanner-600x77.png 600w"
+                                                                srcset="{{asset('/uploads/MatPetBanner.png')}} 1400w,
+                                                                 {{asset('/uploads/MatPetBanner-300x39.png')}} 300w,
+                                                                 {{asset('/uploads/MatPetBanner-768x99.png')}} 768w,
+                                                                 {{asset('/uploads/MatPetBanner-1024x132.png.png')}} 1024w,
+                                                                  {{asset('/uploads/MatPetBanner-600x77.png.png')}} 600w"
                                                                 sizes="(max-width: 1400px) 100vw, 1400px" /></div>
                                                     </figure>
                                                 </div>

@@ -45,7 +45,7 @@
     "Quantity": "Quantity",
     "Price": "Price",
     "Total": "Total",
-    "Update": "Update",
+    "Update": "Update Quantity",
     "Cancel": "Cancel",
     "Order": "Order",
     "Coupon": "Coupon",
@@ -69,6 +69,8 @@
     "Online":"Online Payments",
     "Direct":"Direct Payment",
     "Pay":"Pay",
-    "Readmore":"Read more"
+    "Readmore":"Read more",
+    "PaymentDirect": "Payment Direct",
+    "PaymentOnline": "Payment Online"
 
 }

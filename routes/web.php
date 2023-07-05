@@ -58,14 +58,7 @@ Route::post('/autocomplete-ajax', [HomeController::class, 'autocomplete_ajax']);
 //Danh muc
 //Route::get('/danh-muc-san-pham/{category_id}', [CategoryProduct::class, 'show_category_home']);
 Route::get('/chi-tiet-san-pham/{product_slug}', [ProductController::class, 'details_product']);
-Route::get('/chi-tiet-course/{course_id}', [CourseController::class, 'details_course']);
-//Register
-Route::get('/register', [RegisterController::class, 'register']);
-Route::get('/activity', [HomeController::class, 'activity']);
-Route::get('/sponsor', [HomeController::class, 'sponsor']);
-Route::get('/course', [HomeController::class, 'course']);
-//Mail
-Route::get('/mail', [RegisterController::class, 'mail']);
+
 //send mail
 Route::get('/send-mail', [MailAdminController::class, 'send_mail']);
 //
@@ -121,7 +114,7 @@ Route::get('/show-cart', [CartController::class, 'show_cart']);
 // Route::post('/update-cart-quantity', [CartController::class, 'update_cart_quantity']);
 Route::post('/update-cart', [CartController::class, 'update_cart']);
 Route::post('/add-cart-ajax', [CartController::class, 'add_cart_ajax']);
-Route::get('/gio-hang', [CartController::class, 'gio_hang']);
+Route::get('/gio-hang', [CartController::class, 'gio_hang'])->name('giohang');
 Route::get('/delete-sp/{session_id}', [CartController::class, 'delete_sp']);
 Route::get('/delete-all-cart', [CartController::class, 'delete_all_cart']);
 //Coupon
@@ -149,6 +142,7 @@ Route::post('/save-coupon', [CouponController::class, 'save_coupon']);
 Route::get('/del-coupon/{coupon_id}', [CouponController::class, 'del_coupon']);
 //Checkout
 Route::get('/login-checkout', [CheckoutController::class, 'login_checkout'])->name('Login');
+Route::get('/login-checkout-online', [CheckoutController::class, 'login_checkout_online'])->name('Login_online');
 Route::post('/add-customer', [CheckoutController::class, 'add_customer']);
 Route::get('/add-customer-admin', [CheckoutController::class, 'LayoutCustomer']);
 Route::post('/save-customer', [CheckoutController::class, 'addCustomer']);
@@ -159,6 +153,7 @@ Route::get('/payment', [CheckoutController::class, 'payment']);
 Route::get('/logout-checkout', [CheckoutController::class, 'logout_checkout']);
 Route::post('/login-customer', [CheckoutController::class, 'login_customer']);
 Route::post('/vnpay', [VnpayController::class, 'store'])->name('vnpay');
+Route::get('/order_success', [HomeController::class, 'order_success'])->name('order-success');
 
 Route::post('/confirm-order', [CheckoutController::class, 'confirm_order'])->name('checkout.confirm');
 
@@ -175,52 +170,6 @@ Route::post('/edit-admin-profile/{admin_id}', [AdminController::class, 'editAdmi
 //Print_Order
 Route::get('/print-order/{checkout_code}', [OrderController::class, 'print_order']);
 
-//Banner
-Route::get('/add-banner', [BannerController::class, 'add_banner']);
-Route::get('/edit-banner/{banner_id}', [BannerController::class, 'edit_banner']);
-Route::get('/delete-banner/{banner_id}', [BannerController::class, 'delete_banner']);
-Route::get('/all-banner', [BannerController::class, 'all_banner']);
-Route::get('/unactive-banner/{banner_id}', [BannerController::class, 'unactive_banner']);
-Route::get('/active-banner/{banner_id}', [BannerController::class, 'active_banner']);
-Route::post('/save-banner', [BannerController::class, 'save_banner']);
-Route::post('/update-banner/{banner_id}', [BannerController::class, 'update_banner']);
-//Slider
-Route::get('/add-slider', [SliderController::class, 'add_slider']);
-Route::get('/edit-slider/{slider_id}', [SliderController::class, 'edit_slider']);
-Route::get('/delete-slider/{slider_id}', [SliderController::class, 'delete_slider']);
-Route::get('/all-slider', [SliderController::class, 'all_slider']);
-Route::get('/unactive-slider/{slider_id}', [SliderController::class, 'unactive_slider']);
-Route::get('/active-slider/{slider_id}', [SliderController::class, 'active_slider']);
-Route::post('/save-slider', [SliderController::class, 'save_slider']);
-Route::post('/update-slider/{slider_id}', [SliderController::class, 'update_slider']);
-//Sponsor
-Route::get('/add-sponsor', [SponsorController::class, 'add_sponsor']);
-Route::get('/edit-sponsor/{sponsor_id}', [SponsorController::class, 'edit_sponsor']);
-Route::get('/delete-sponsor/{sponsor_id}', [SponsorController::class, 'delete_sponsor']);
-Route::get('/all-sponsor', [SponsorController::class, 'all_sponsor']);
-Route::get('/unactive-sponsor/{sponsor_id}', [SponsorController::class, 'unactive_sponsor']);
-Route::get('/active-sponsor/{sponsor_id}', [SponsorController::class, 'active_sponsor']);
-Route::post('/save-sponsor', [SponsorController::class, 'save_sponsor']);
-Route::post('/update-sponsor/{sponsor_id}', [SponsorController::class, 'update_sponsor']);
-//Course
-Route::get('/add-course', [CourseController::class, 'add_course']);
-Route::get('/edit-course/{course_id}', [CourseController::class, 'edit_course']);
-Route::get('/delete-course/{course_id}', [CourseController::class, 'delete_course']);
-Route::get('/all-course', [CourseController::class, 'all_course']);
-Route::get('/unactive-course/{course_id}', [CourseController::class, 'unactive_course']);
-Route::get('/active-course/{course_id}', [CourseController::class, 'active_course']);
-Route::post('/save-course', [CourseController::class, 'save_course']);
-Route::post('/update-course/{course_id}', [CourseController::class, 'update_course']);
-//Activity
-Route::get('/add-activity', [ActivityController::class, 'add_activity']);
-Route::get('/edit-activity/{activity_id}', [ActivityController::class, 'edit_activity']);
-Route::get('/delete-activity/{activity_id}', [ActivityController::class, 'delete_activity']);
-Route::get('/all-activity', [ActivityController::class, 'all_activity']);
-Route::get('/unactive-activity/{activity_id}', [ActivityController::class, 'unactive_activity']);
-Route::get('/active-activity/{activity_id}', [ActivityController::class, 'active_activity']);
-Route::post('/save-activity', [ActivityController::class, 'save_activity']);
-Route::post('/update-activity/{activity_id}', [ActivityController::class, 'update_activity']);
-//introduce
 //Login facebook
 Route::get('/login-facebook', [AdminController::class, 'login_facebook']);
 Route::get('/admin/callback', [AdminController::class, 'callback_facebook']);
@@ -236,20 +185,6 @@ Route::post('/filter-by-date', [AdminController::class, 'filter_by_date']);
 Route::post('/day-orders', [AdminController::class, 'day_orders']);
 Route::post('/dashboard-filter', [AdminController::class, 'dashboard_filter']);
 
-//APi Doccument gg drive
-Route::get('/upload_file', [DocumentController::class, 'upload_file']);
-Route::get('/upload_image', [DocumentController::class, 'upload_image']);
-Route::get('/upload_video', [DocumentController::class, 'upload_video']);
-
-Route::get('/download_document', [DocumentController::class, 'download_document']);
-Route::get('/creat_document', [DocumentController::class, 'creat_document']);
-Route::get('/list_document', [DocumentController::class, 'list_document']);
-Route::get('/read_document', [DocumentController::class, 'read_document']);
-Route::get('/delete_document', [DocumentController::class, 'delete_document']);
-//Folder
-Route::get('/creat_folder', [DocumentController::class, 'creat_folder']);
-Route::get('/rename_folder', [DocumentController::class, 'rename_folder']);
-Route::get('/delete_folder', [DocumentController::class, 'delete_folder']);
 //Send Mail
 Route::get('/send-coupon-vip/{coupon_times}/{coupon_condition}/{coupon_number}/{coupon_code}', [MailAdminController::class, 'send_coupon_vip']);
 Route::get('/send-coupon/{coupon_times}/{coupon_condition}/{coupon_number}/{coupon_code}', [MailAdminController::class, 'send_coupon']);
@@ -292,8 +227,6 @@ Route::post('/edit-customer/{customer_id}', [AdminController::class, 'editCustom
 Route::post('/edit-password/{customer_id}', [AdminController::class, 'editPassword']);
 Route::get('/changepass/{customer_id}', [AdminController::class, 'changepass']);
 //gio hang
-// Route::get('/show-cart', [CartController::class, 'showCartMenu']);
-//////////////////////////////////
 
 //category-mxh
 Route::get('/add-category-mxh', [CategoryMxhController::class, 'addCategoryMxh']);
@@ -314,8 +247,8 @@ Route::get('/pet-mxh/infor/{post_id}', [SocialController::class, 'inFor'])->name
 Route::post('/add-comment-post', [SocialController::class, 'addComment']);
 Route::get('like/{post_id}', [SocialController::class, 'likePost']);
 Route::get('/pet-mxh/search',[SocialController::class,'search'])->name('SearchMXH');
-Route::get('edit-post',[SocialController::class,'edit']);
-Route::post('save-post',[SocialController::class,'savePost'])->name('EditPost');
+Route::get('edit-post/{post_id}',[SocialController::class,'edit'])->name('edit-post');
+Route::post('save-post',[SocialController::class,'savePost'])->name('save-post');
 
 //danhmuc
 Route::get('/add-danhmuc', [DanhmucController::class, 'addDanhmuc']);
@@ -332,7 +265,5 @@ Route::get('/all-accessory', [HomeController::class, 'allAccessory']);
 Route::get('/all-pet', [HomeController::class, 'allPet']);
 //paypal
 Route::get('handle-payment', 'PayPalPaymentController@handlePayment')->name('make.payment');
-
 Route::get('cancel-payment', 'PayPalPaymentController@paymentCancel')->name('cancel.payment');
-
 Route::get('payment-success', 'PayPalPaymentController@paymentSuccess')->name('success.payment');

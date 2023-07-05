@@ -47,7 +47,7 @@ class MailAdminController extends Controller
         );
         Mail::send('admin.coupon.send_coupon.send_coupon_vip', ['coupon' => $coupon], function ($message) use ($title_mail, $data) {
             $message->to($data['email'])->subject($title_mail);
-            $message->from($data['email'], $title_mail);
+//            $message->from($data['email'], $title_mail);
         });
         return redirect()->back()->with('message', 'Gửi thành công');
     }
@@ -72,7 +72,6 @@ class MailAdminController extends Controller
 //        dd($coupon);
          Mail::send('admin.coupon.send_coupon.send_coupon', ['coupon' => $coupon], function ($message) use ($title_mail, $data) {
              $message->to($data['email'])->subject($title_mail);
-             $message->from($data['email'], $title_mail);
          });
         return redirect()->back()->with('message', 'Gửi thành công');
     }

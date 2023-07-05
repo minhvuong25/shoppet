@@ -1,6 +1,7 @@
 @extends('layout')
 @section('content')
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{{--    <link rel="stylesheet" href="{{asset('/cdn/ajax_lib_640.css')}}">--}}
 <div class="table-agile-info">
     <div class="panel panel-default">
       <div class="panel-heading text-center" style="font-weight:900;font-size:20px;text-transform:uppercase">

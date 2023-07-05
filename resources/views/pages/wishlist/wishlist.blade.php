@@ -24,10 +24,10 @@
                                     class="new">new</span></div> --}}
                             <div class="product-extra-link text-center">
                                 <ul class="list-product-extra-link list-inline-block">
-                                    <li><a href="{{ URL::to('add-wishlist/' . $product->product_id) }}" style="display: flex;justify-content: center;align-items: center;"
+                                    <li><a href="{{ URL::to('/del-wishlist/' . $product->product_id) }}" style="display: flex;justify-content: center;align-items: center;"
                                             class="add_to_wishlist wishlist-link"
                                             data-product-title="{{ $product->getProductFavorite->product_content }}"><i
-                                                class="pegk pe-7s-like"></i><span>Yêu
+                                                class="pegk pe-7s-trash"></i><span>Xóa Yêu
                                                 thích</span></a></li>
                                     <li><a title="Xem nhanh"
                                             href="{{ URL::to('/chi-tiet-san-pham/' . $product->getProductFavorite->product_slug) }}" style="display: flex;justify-content: center;align-items: center;"

@@ -285,7 +285,7 @@ class AdminController extends Controller
             Session::put('customer_picture', $account_name->customer_picture);
             Session::put('customer_name', $account_name->customer_name);
         }
-        return redirect('/trang-chu')->with('message', 'Đăng nhập thành công');
+        return redirect('/trang-chu')->with('message', 'Đăng nhập google thành công');
     }
 
     public function loginCustomerFacebook()
@@ -302,7 +302,7 @@ class AdminController extends Controller
             $account_name = Customer::where('customer_id', $account->user)->first();
             Session::put('customer_id', $account_name->customer_id);
             Session::put('customer_name', $account_name->customer_name);
-            return redirect('/')->with('message', 'Success');
+            return redirect('/')->with('message', 'Đăng nhập facebook thành công');
         } elseif ($account == null) {
             $facebook = 'facebook';
             $customer_login = new Social([
@@ -325,7 +325,7 @@ class AdminController extends Controller
             $account_new = Customer::where('customer_id', $customer_login->user)->first();
             Session::put('customer_id', $account_new->customer_id);
             Session::put('customer_name', $account_new->customer_name);
-            return redirect('/')->with('message', 'Success');
+            return redirect('/')->with('message', 'Đăng nhập facebook thành công');
         }
     }
     public function profileAdmin($admin_id)

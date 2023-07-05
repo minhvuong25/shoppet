@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="{{ URL::to('/blog/css/style.css') }}">
     <title>Profle - Socialbook</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
-    <script src="http://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
     <link href="{{ asset('/frontend/icon/pe-icon-7-stroke/css/pe-icon-7-stroke.css') }}" rel="stylesheet">
+    <script src="{{asset('/ckeditor/ckeditor.js')}}"></script>
     <style>
+        #footer {
+            padding-bottom: 10px; /* Hoặc margin-bottom: 10px; */
+        }
         p img {
             width: 100%;
         }
@@ -64,12 +67,16 @@
         }
 
     </style>
+
 </head>
 
 <body>
     <nav class="navbar">
         <div class="nav-left"><a href="{{URL::to('pet-mxh')}}"><img class="logo" src="{{ URL::to('/frontend/images/logopet.jpg') }}"
             alt=""></a>
+        </div>
+        <div class="nav-right">
+            <button type="button" class="btn btn-default" > trang chủ</button>
         </div>
         <div class="nav-right">
             <div class="profile-darkButton">
@@ -105,8 +112,8 @@
             <div class="left-sidebar profile-left-sidebar">
                 <div class="left-profile-sidebar-top">
                     <div class="intro-bio">
-                        <h4>intro</h4>
-                        <p>Belive in yourself and you do unbelievable things <i class="far fa-smile-beam"></i></p>
+                        <h4>Lời khuyên</h4>
+                        <p>Hãy yêu thú cưng của bạn như cách bạn yêu cuộc sống <i class="far fa-smile-beam"></i></p>
                         <hr>
                     </div>
                     <div class="background-details">
@@ -180,7 +187,7 @@
                                     <div>
                                         <a href="{{ URL::to('/del-post/' . $post->post_id) }}" title="Xóa bài đăng"><i
                                                 class="fas fa-times"></i></a>
-                                        <a href="{{ URL::to('/edit-post/') }}" title="Sửa bài đăng"><i
+                                        <a href="{{ URL::to('/edit-post/' . $post->post_id) }}" title="Sửa bài đăng"><i
                                                 class="fas fa-edit" style="margin-left: 15px"></i></a>
                                     </div>
                                 @endif
@@ -190,15 +197,10 @@
                                     {!! $post->post_content !!}
                                 </p>
                             </div>
-                            <div class="post-reaction">
-                                <div class="activity-icons">
-                                    <div><i class="pegk pe-7s-like2"></i></div>
-                                    <div><i class="pegk pe-7s-like"></i></div>
-                                </div>
-                            </div>
+
                         </div>
                     @else
-                        <form action="{{ route('EditPost') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('edit-post/') .$post->post_id }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="status-field-container write-post-container">
                                 <div class="form-group">
@@ -230,6 +232,7 @@
                                     </script>
                                 </div>
                                 <button type="submit"
+
                                         style="display: block;margin: 0 auto;color:black;padding:10px;background:#1876f2;border-radius:10px">Đăng</button>
                             </div>
 
@@ -244,7 +247,6 @@
     </footer>
 
     <script src="{{ URL::to('/blog/js/function.js') }}"></script>
-    <script src="{{ asset('/themes/js/ckeditor-4.18.0.js') }}"></script>
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
@@ -271,6 +273,7 @@
                 modal.style.display = "none";
             }
         }
+
     </script>
 </body>
 

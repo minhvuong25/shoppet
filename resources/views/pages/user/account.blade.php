@@ -37,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="city-dd">Số điện thoại <span class="require">*</span></label>
-                                <input type="text" id="city-dd" class="form-control"
+                                <input required type="text" id="city-dd" class="form-control"
                                        value="{{ $getUserProfile->customer_phone }}" name="customer_phone">
                             </div>
                         </div>

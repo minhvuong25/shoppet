@@ -40,12 +40,6 @@ class DanhmucController extends Controller
         $danhmuc->danhmuc_desc = $data['danhmuc_desc'];
         $danhmuc->danhmuc_status = $data['danhmuc_status'];
         $danhmuc->save();
-
-        // $data = array();
-        // $data['danhmuc_name'] = $request->danhmuc_name;
-        // $data['danhmuc_desc'] = $request->danhmuc_desc;
-        // $data['danhmuc_status'] = $request->danhmuc_status;
-        // DB::table('tbl_danhmuc')->insert($data);
         Session::put('message','Thêm thành công');
         return Redirect::to('all-danhmuc');
     }

@@ -71,7 +71,8 @@
                         <td style="padding-left:15px"><input type="submit" name="update-cart"
                                 class="btn btn-default btn-sm" value="{{ __('Update') }}"></td>
                         <td style="list-style: none;padding-top:15px;padding-bottom:15px">
-                            <li style="margin-left:15px">{{ __('Total') }} :<span>{{ number_format($total) }} VND</span></li>
+                            <li >{{ __('Tổng đơn hàng') }} :<span>{{ number_format($total) }} VND</span></li>
+                            <br>
                             @if (Session::get('coupon'))
                                 <li>
                                     @foreach (Session::get('coupon') as $key => $cou)
@@ -80,10 +81,10 @@
                                             <p>
                                                 @php
                                                     $total_coupon = ($total * $cou['coupon_number']) / 100;
-                                                    echo '<p>Tổng giảm :' . number_format($total_coupon) . ' VND</p>';
+//                                                    echo '<p>Tổng giảm :' . number_format($total_coupon) . ' VND</p>';
                                                 @endphp
                                             </p>
-                                            <p>{{ __('Total') }} : {{ number_format($total - $total_coupon) }} VND</p>
+                                            <p>{{ __('Đơn hàng sau khi giảm giá') }} : {{ number_format($total - $total_coupon) }} VND</p>
                                             <a href="{{ url('del-cou') }}"
                                                 class="btn btn-primary">{{ __('DelCoupon') }}
                                             </a>
@@ -115,9 +116,11 @@
                                 </a>
                             @else
                                 <a href="{{ url('login-checkout') }}" class="btn btn-primary pull-right" style="margin-right:15px;margin-left:15px">
-                                    {{ __('Order') }}
+                                    {{ __('Payment Direct') }}
                                 </a>
-
+                                <a href="{{ route('Login_online') }}" class="btn btn-primary pull-right" style="margin-right:15px;margin-left:15px">
+                                    {{ __('Payment Online') }}
+                                </a>
                             @endif
 
                             <a href="{{ url('/delete-all-cart/') }}"
@@ -146,7 +149,7 @@
                             @csrf
                             <div style="display: flex;margin-bottom:30px;margin-top:15px">
                                 <input type="text" class="form-control" name="coupon"
-                                    placeholder="{{ __('EnterDiscountCode') }}">
+                                    placeholder="{{ __('Enter Discount Code') }}">
                                 <input type="submit" name="form-control check_coupon"
                                     class="btn btn-default btn-sm check_coupon" value="{{ __('Coupon') }}">
                             </div>

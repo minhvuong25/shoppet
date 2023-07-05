@@ -204,11 +204,12 @@
                                         </div>
                                         <div style="display:flex;align-items: center;">
                                             <p style="width:30%;font-size: 16px; font-weight: 400; line-height: 22px; color: #777777;margin:5px">Hình thức thanh toán :</p><span>
-                                            @if ($shipping_array['shipping_method']==0)
-                                                Chuyển khoản
-                                            @else
-                                                Tiền mặt
-                                            @endif
+                                                {{$code['order_payment']}}
+{{--                                            @if ($shipping_array['shipping_method']==0)--}}
+{{--                                                Chuyển khoản--}}
+{{--                                            @else--}}
+{{--                                                Tiền mặt--}}
+{{--                                            @endif--}}
                                             </span>
                                         </div>
 
